@@ -19,6 +19,45 @@
 	
 	}
 	
+	function get_all_users() {
+		$param = '"sizelimit":"99999"';
+		return ipa_curl('user-find', $param);
+	}
+	
+	function get_all_usernames() {
+		$param = '"sizelimit":"99999","pkey_only":"True"';
+		return ipa_curl('user-find', $param);
+	}
+	
+	function get_all_active_users() {
+		$param = '"sizelimit":"99999","in_role":"aktiv"';
+		return ipa_curl('user-find', $param);
+	}
+	function get_all_active_usernames() {
+		$param = '"sizelimit":"99999","in_role":"aktiv","pkey_only":"True"';
+		return ipa_curl('user-find', $param);
+	}
+	
+	function get_all_inactive_users() {
+		$param = '"sizelimit":"99999","in_role":"inaktiv"';
+		return ipa_curl('user-find', $param);
+	}
+	
+	function get_all_inactive_usernames() {
+		$param = '"sizelimit":"99999","in_role":"inaktiv","pkey_only":"True"';
+		return ipa_curl('user-find', $param);
+	}
+	
+	function get_user($username) {
+		$param = '"uid":"' . $username . '"';
+		return ipa_curl('user-find', $param);
+	}
+	
+	function get_all_users_of_group($groupname) {
+		$param = '"sizelimit":"99999","in_groups":"' . $groupname . '"';
+		return ipa_curl('user-find', $param);
+	}
+	
 	function change_email($username, $new_email){
 		$param = '"uid":"' . $username . '", "mail":"' . $new_email . '"';
 		return ipa_curl('user_mod', $param);
@@ -86,6 +125,21 @@
 		$param .= '"sn":"' . $last_name . '",';
 		$param .= '"telephonenumber":"' . $telephonenumber . '",';
 		$param .= '"mail":"' . $email . '",';
+		$param .= '"loginshell":"/bin/sh"';
+		
+		echo $param;
+		
+		return ipa_curl('user_add', $param);
+	}
+	
+	function add_user_with_random_password($username, $first_name, $last_name, $email, $telephonenumber) {
+		$param = '"uid":"' . $username . '",';
+		$param .= '"userpassword":"' . $password . '",';
+		$param .= '"givenname":"' . $first_name . '",';
+		$param .= '"sn":"' . $last_name . '",';
+		$param .= '"telephonenumber":"' . $telephonenumber . '",';
+		$param .= '"mail":"' . $email . '",';
+		$param .= '"random":"True",'
 		$param .= '"loginshell":"/bin/sh"';
 		
 		echo $param;
